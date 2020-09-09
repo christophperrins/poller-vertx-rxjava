@@ -22,8 +22,8 @@ public class EndpointServiceImpl implements EndpointService {
 	}
 
 	@Override
-	public Single<Single<Long>> addEndpoint(Endpoint endpoint) {
-		return endpointRepository.addEndpoint(endpoint);
+	public Single<Long> addEndpoint(Endpoint endpoint) {
+		return endpointRepository.findOrAddEndpointByHostname(endpoint);
 	}
 
 	@Override

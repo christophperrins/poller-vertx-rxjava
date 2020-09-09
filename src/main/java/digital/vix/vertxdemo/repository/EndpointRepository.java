@@ -11,7 +11,7 @@ public interface EndpointRepository {
 	public Flowable<JsonObject> readAllEndpoints();
 	
 	
-	public Single<Single<Long>> addEndpoint(Endpoint endpoint);
+	public Single<Long> findOrAddEndpointByHostname(Endpoint endpoint);
 	
 	public Completable updateEndpoint(Endpoint endpoint);
 	

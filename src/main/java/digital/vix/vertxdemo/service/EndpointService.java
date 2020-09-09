@@ -10,7 +10,7 @@ public interface EndpointService {
 
 	public Flowable<JsonObject> readAllEndpoints();
 		
-	public Single<Single<Long>> addEndpoint(Endpoint endpoint);
+	public Single<Long> addEndpoint(Endpoint endpoint);
 	
 	public Completable updateEndpoint(Endpoint endpoint);
 	

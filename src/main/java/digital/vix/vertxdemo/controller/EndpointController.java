@@ -51,11 +51,11 @@ public class EndpointController extends AbstractVerticle {
 		try {
 			Endpoint endpoint = mapper.readValue(routingContext.getBodyAsString(), Endpoint.class);
 			endpoint.setActive(true);
-			endpointService.addEndpoint(endpoint).subscribe(single -> single.subscribe(id -> {
+			endpointService.addEndpoint(endpoint).subscribe(id -> {
 				endpoint.setId(id);
 				endpointHistoryService.pollEndpoint(endpoint);
 				routingContext.response().end(String.valueOf(id));
-			}));
+			});
 		} catch (JsonProcessingException e) {
 			routingContext.response().setStatusCode(400).end("Body was not in correct JSON format");
 		}

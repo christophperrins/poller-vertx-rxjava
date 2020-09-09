@@ -1,6 +1,7 @@
 package digital.vix.vertxdemo.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import digital.vix.vertxdemo.models.Endpoint;
 import io.reactivex.Completable;
@@ -24,36 +25,36 @@ public class EndpointRepositoryImpl implements EndpointRepository {
 				.flatMapPublisher(resultSet -> Flowable.fromIterable(resultSet.getRows()));
 	}
 
-	public Single<Long> findEndpoint(String endpoint) {
+	public Single<Optional<Long>> findEndpoint(String endpoint) {
 		return sqlClient.rxQueryWithParams("SELECT id FROM endpoints where endpoint = ?", new JsonArray().add(endpoint))
 				.map(rs -> {
 					List<JsonObject> rows = rs.getRows();
 					if (rows.size() == 0) {
-						return -1l;
+						return Optional.empty();
 					} else {
-						return rows.get(0).getLong("id");
+						return Optional.of(rows.get(0).getLong("id"));
 					}
 				});
 	}
-	
+
+	public Single<Long> createEndpoint(Endpoint endpoint) {
+		return sqlClient
+				.rxUpdateWithParams(
+						"INSERT INTO endpoints(name, endpoint, frequency, active) values (?, ?, ?, ?)",
+						new JsonArray().add(endpoint.getName()).add(endpoint.getEndpoint())
+								.add(endpoint.getFrequency()).add(true))
+				.map(updateResult -> updateResult.getKeys().getLong(0));
+	}
 
 	@Override
-	public Single<Single<Long>> addEndpoint(Endpoint endpoint) {
-		return findEndpoint(endpoint.getEndpoint()).map(exists -> {
-			if (exists == -1l) {
-				return sqlClient
-						.rxUpdateWithParams(
-								"INSERT INTO endpoints(name, endpoint, frequency, active) values (?, ?, ?, ?)",
-								new JsonArray().add(endpoint.getName()).add(endpoint.getEndpoint())
-										.add(endpoint.getFrequency()).add(true))
-						.map(updateResult -> updateResult.getKeys().getLong(0));
-
+	public Single<Long> findOrAddEndpointByHostname(Endpoint endpoint) {
+		return findEndpoint(endpoint.getEndpoint()).flatMap(optionalId -> {
+			if (optionalId.isPresent()) {
+				return Single.just(optionalId.get());
 			} else {
-				updateEndpoint(endpoint).subscribe();
-				return Single.just(exists);
+				return createEndpoint(endpoint);
 			}
 		});
-
 	}
 
 	@Override
