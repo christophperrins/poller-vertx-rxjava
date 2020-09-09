@@ -1,20 +1,62 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>digital.vix</groupId>
-  <artifactId>demo-vertx</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-   <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <vertx.version>3.7.0</vertx.version>
-  </properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>digital.vix</groupId>
+	<artifactId>demo-vertx</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<vertx.version>3.9.2</vertx.version>
+	</properties>
 
-  <!-- tag::dependencies[] -->
-  <dependencies>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-web</artifactId>
-      <version>${vertx.version}</version>
-    </dependency>
-  </dependencies>
+	<!-- tag::dependencies[] -->
+	<dependencies>
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-web</artifactId>
+			<version>${vertx.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-web-client</artifactId>
+			<version>${vertx.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.30</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-rx-java2</artifactId>
+			<version>${vertx.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-jdbc-client</artifactId>
+			<version>${vertx.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.21</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.11.3</version>
+		</dependency>
+	</dependencies>
 </project>
