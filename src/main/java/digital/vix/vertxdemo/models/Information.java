@@ -90,4 +90,15 @@ public class Information {
         return true;
     }
 
+	private Long endpointId;
+
+	public Long getEndpointId() {
+		return endpointId;
+	}
+
+	public void setEndpointId(Long endpointId) {
+		this.endpointId = endpointId;
+	}
+	
+	
 }

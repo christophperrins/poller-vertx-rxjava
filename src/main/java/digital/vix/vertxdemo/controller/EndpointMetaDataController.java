@@ -1,9 +1,14 @@
 package digital.vix.vertxdemo.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import digital.vix.vertxdemo.dto.EndpointMetaDataDto;
 import digital.vix.vertxdemo.models.Endpoint;
+import digital.vix.vertxdemo.models.Information;
 import digital.vix.vertxdemo.service.EndpointService;
 import digital.vix.vertxdemo.service.InformationService;
 import io.vertx.reactivex.core.AbstractVerticle;
@@ -30,9 +35,9 @@ public class EndpointMetaDataController extends AbstractVerticle {
 	public void start() {
 		router.get("/api/endpoint").handler(this::getEndpoint);
 	}
-	
+
 	public void getEndpoint(RoutingContext routingContext) {
-		if(routingContext.request().getParam("id") != null) {
+		if (routingContext.request().getParam("id") != null) {
 			getEndpointById(routingContext);
 		} else if (routingContext.request().getParam("ids") != null) {
 			getEndpointsByIds(routingContext);
@@ -58,10 +63,11 @@ public class EndpointMetaDataController extends AbstractVerticle {
 		}
 
 	}
-	
+
 	private boolean contains(long search, long[] values) {
 		for (long value : values) {
-			if (search == value) return true;
+			if (search == value)
+				return true;
 		}
 		return false;
 	}
@@ -74,16 +80,21 @@ public class EndpointMetaDataController extends AbstractVerticle {
 			for (int i = 0; i < idTexts.length; i++) {
 				ids[i] = Long.parseLong(idTexts[i]);
 			}
-			//TODO Flowabale to find in informationService (could be made more efficient using caching 
-//			endpointService.readAllEndpoints().map(jsonObject -> {
-//				return mapper.readValue(jsonObject.toString(), Endpoint.class);
-//			}).filter(endpoint -> contains(endpoint.getId(), ids)).flatMap(endpoint -> {
-//				return informationService.findEndpointById(endpoint.getId()).map(information -> {
-//					return new EndpointMetaDataDto(endpoint, information);
-//				});
-//			}).subscribe(endpointMeta -> {
-//				routingContext.response().end(mapper.writeValueAsString(endpointMeta));
-//			});
+			endpointService.readAllEndpoints().map(jsonObject -> {
+				return mapper.readValue(jsonObject.toString(), Endpoint.class);
+			}).filter(endpoint -> contains(endpoint.getId(), ids)).toList().flatMap(endpointList -> {
+				return informationService.findEndpointsByIds(ids).toList().map(informationList -> {
+
+					return endpointList.stream().map(endpoint -> {
+						Information foundInfo = informationList.stream()
+								.filter(information -> information.getEndpointId() == endpoint.getId()).findFirst()
+								.orElseGet(() -> new Information());
+						return new EndpointMetaDataDto(endpoint, foundInfo);
+					}).collect(Collectors.toList());
+				});
+			}).subscribe(endpointMetas -> {
+				routingContext.response().end(mapper.writeValueAsString(endpointMetas));
+			});
 		} catch (NumberFormatException e) {
 			routingContext.response().setStatusCode(400).end("not valid ids");
 			return;
