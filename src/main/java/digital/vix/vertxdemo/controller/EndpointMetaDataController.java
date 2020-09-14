@@ -36,6 +36,16 @@ public class EndpointMetaDataController extends AbstractVerticle {
 		router.get("/api/endpoint").handler(this::getEndpoint);
 	}
 
+	/**
+	 * Method to determine whether multiple ids have been entered or a single id. <br><br>
+	 * 
+	 * If using a single id the following should be used /api/endpoint?id=3 <br>
+	 * Calls: {@link #getEndpointById(RoutingContext)} <br><br>
+	 * 
+	 * Whereas when using multiple ids: /api/endpoint?ids=3%2C4$2C5  (which translates to 3,4,5)<br>
+	 * Calls: {@link #getEndpointsByIds(RoutingContext)}<br>
+	 * @param routingContext
+	 */
 	public void getEndpoint(RoutingContext routingContext) {
 		if (routingContext.request().getParam("id") != null) {
 			getEndpointById(routingContext);
@@ -45,7 +55,6 @@ public class EndpointMetaDataController extends AbstractVerticle {
 	}
 
 	public void getEndpointById(RoutingContext routingContext) {
-		System.out.println("ID");
 		try {
 			String idText = routingContext.request().getParam("id");
 			long id = Long.parseLong(idText);
@@ -73,7 +82,6 @@ public class EndpointMetaDataController extends AbstractVerticle {
 	}
 
 	public void getEndpointsByIds(RoutingContext routingContext) {
-		System.out.println("IDS");
 		try {
 			String[] idTexts = routingContext.request().getParam("ids").split(",");
 			final long[] ids = new long[idTexts.length];
