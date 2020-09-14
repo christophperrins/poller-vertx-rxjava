@@ -9,7 +9,7 @@ import digital.vix.vertxdemo.models.Endpoint;
 import digital.vix.vertxdemo.models.Information;
 import digital.vix.vertxdemo.service.EndpointService;
 import digital.vix.vertxdemo.service.InformationService;
-import digital.vix.vertxdemo.utils.ApplicationUtils;
+import digital.vix.vertxdemo.utils.ArrayUtils;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.RoutingContext;
@@ -86,7 +86,7 @@ public class EndpointMetaDataController extends AbstractVerticle {
 			}
 			endpointService.readAllEndpoints().map(jsonObject -> {
 				return mapper.readValue(jsonObject.toString(), Endpoint.class);
-			}).filter(endpoint -> ApplicationUtils.arrayContains(ids, endpoint.getId())).toList().flatMap(endpointList -> {
+			}).filter(endpoint -> ArrayUtils.arrayContains(ids, endpoint.getId())).toList().flatMap(endpointList -> {
 				return informationService.findEndpointsByIds(ids).toList().map(informationList -> {
 					return endpointList.stream().map(endpoint -> {
 						Information foundInfo = informationList.stream()

@@ -1,6 +1,6 @@
 package digital.vix.vertxdemo.utils;
 
-public class ApplicationUtils {
+public class ArrayUtils {
 
 	/**
 	 * If an array contains any of the following values return true
