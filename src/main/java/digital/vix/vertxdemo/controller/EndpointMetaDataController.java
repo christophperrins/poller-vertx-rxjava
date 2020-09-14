@@ -1,7 +1,5 @@
 package digital.vix.vertxdemo.controller;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +9,7 @@ import digital.vix.vertxdemo.models.Endpoint;
 import digital.vix.vertxdemo.models.Information;
 import digital.vix.vertxdemo.service.EndpointService;
 import digital.vix.vertxdemo.service.InformationService;
+import digital.vix.vertxdemo.utils.ApplicationUtils;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.RoutingContext;
@@ -37,13 +36,18 @@ public class EndpointMetaDataController extends AbstractVerticle {
 	}
 
 	/**
-	 * Method to determine whether multiple ids have been entered or a single id. <br><br>
+	 * Method to determine whether multiple ids have been entered or a single id.
+	 * <br>
+	 * <br>
 	 * 
 	 * If using a single id the following should be used /api/endpoint?id=3 <br>
-	 * Calls: {@link #getEndpointById(RoutingContext)} <br><br>
+	 * Calls: {@link #getEndpointById(RoutingContext)} <br>
+	 * <br>
 	 * 
-	 * Whereas when using multiple ids: /api/endpoint?ids=3%2C4$2C5  (which translates to 3,4,5)<br>
+	 * Whereas when using multiple ids: /api/endpoint?ids=3%2C4$2C5 (which
+	 * translates to 3,4,5)<br>
 	 * Calls: {@link #getEndpointsByIds(RoutingContext)}<br>
+	 * 
 	 * @param routingContext
 	 */
 	public void getEndpoint(RoutingContext routingContext) {
@@ -73,14 +77,6 @@ public class EndpointMetaDataController extends AbstractVerticle {
 
 	}
 
-	private boolean contains(long search, long[] values) {
-		for (long value : values) {
-			if (search == value)
-				return true;
-		}
-		return false;
-	}
-
 	public void getEndpointsByIds(RoutingContext routingContext) {
 		try {
 			String[] idTexts = routingContext.request().getParam("ids").split(",");
@@ -90,9 +86,8 @@ public class EndpointMetaDataController extends AbstractVerticle {
 			}
 			endpointService.readAllEndpoints().map(jsonObject -> {
 				return mapper.readValue(jsonObject.toString(), Endpoint.class);
-			}).filter(endpoint -> contains(endpoint.getId(), ids)).toList().flatMap(endpointList -> {
+			}).filter(endpoint -> ApplicationUtils.arrayContains(ids, endpoint.getId())).toList().flatMap(endpointList -> {
 				return informationService.findEndpointsByIds(ids).toList().map(informationList -> {
-
 					return endpointList.stream().map(endpoint -> {
 						Information foundInfo = informationList.stream()
 								.filter(information -> information.getEndpointId() == endpoint.getId()).findFirst()
