@@ -8,6 +8,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.sql.ResultSet;
 
 public interface InformationService {
+
     public Flowable<JsonObject> all();
 
     public Single<ResultSet> findById(long id);
@@ -23,4 +24,5 @@ public interface InformationService {
     public Completable deleteByEndpointId(long id);
 
     public Single<Long> create(Information information);
+
 }

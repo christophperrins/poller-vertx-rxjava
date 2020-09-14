@@ -66,13 +66,13 @@ public class InformationRepositoryImpl implements InformationRepository {
                 .ignoreElement();
     };
 
-    public Single<JsonObject> create(Information information) {
+    public Single<Long> create(Information information) {
         return sqlClient
                 .rxUpdateWithParams(
                         "INSERT INTO information (owner, street, postcode, city, endpoint_id) values (?, ?, ?, ?, ?)",
                         new JsonArray().add(information.getOwner()).add(information.getStreet())
                                 .add(information.getPostcode()).add(information.getCity()).add(information.getEndPointId()))
-                .map(updateResult -> updateResult.toJson());
+                .map(updateResult -> updateResult.getKeys().getLong(0));
     }
 
 }
