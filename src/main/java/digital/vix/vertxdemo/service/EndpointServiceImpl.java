@@ -12,7 +12,6 @@ public class EndpointServiceImpl implements EndpointService {
 	private EndpointRepository endpointRepository;
 
 	public EndpointServiceImpl(EndpointRepository endpointRepository) {
-		super();
 		this.endpointRepository = endpointRepository;
 	}
 

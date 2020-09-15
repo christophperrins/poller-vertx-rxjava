@@ -9,7 +9,6 @@ public class EndpointMetaDataDto {
 	private Information metaData;
 
 	public EndpointMetaDataDto(Endpoint endpoint, Information metaData) {
-		super();
 		this.endpoint = endpoint;
 		this.metaData = metaData;
 	}

@@ -19,7 +19,6 @@ public class EndpointHistory {
 	}
 
 	public EndpointHistory(Long id, Long endpointId, String status, Long responseTime, Date timedate) {
-		super();
 		this.id = id;
 		this.endpointId = endpointId;
 		this.status = status;

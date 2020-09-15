@@ -38,12 +38,12 @@ public class Application {
 	public void run() {
 		Vertx vertx = Vertx.vertx();
 
-		JsonObject jsonObject = new JsonObject()
+		JsonObject jdbcConfig = new JsonObject()
 				.put("url", "jdbc:mysql://localhost:3306/pollervertx?serverTimezone=BST")
 				.put("driver_class", "com.mysql.cj.jdbc.Driver").put("user", "root").put("password", "root")
 				.put("max_pool_size", 30);
 
-		sqlClient = JDBCClient.createShared(vertx, jsonObject);
+		sqlClient = JDBCClient.createShared(vertx, jdbcConfig);
 
 		logger.info("Connecting to database...");
 		sqlClient.getConnection(ar -> {

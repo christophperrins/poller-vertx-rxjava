@@ -16,7 +16,6 @@ public class EndpointHistoryController extends AbstractVerticle {
 
 	public EndpointHistoryController(Router router, ObjectMapper mapper,
 			EndpointHistoryService endpointHistoryService) {
-		super();
 		this.router = router;
 		this.mapper = mapper;
 		this.endpointHistoryService = endpointHistoryService;
