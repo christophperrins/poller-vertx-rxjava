@@ -9,10 +9,11 @@ import io.vertx.core.json.JsonObject;
 public interface EndpointRepository {
 
 	public Flowable<JsonObject> readAllEndpoints();
-	
+
+	public Flowable<JsonObject> findByEndPointIds(long[] id);
 	
 	public Single<Long> findOrAddEndpointByHostname(Endpoint endpoint);
-	
+
 	public Completable updateEndpoint(Endpoint endpoint);
 	
 	public Completable deleteEndpoint(long id);

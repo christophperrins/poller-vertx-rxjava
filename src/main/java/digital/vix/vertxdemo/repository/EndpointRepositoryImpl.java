@@ -25,6 +25,22 @@ public class EndpointRepositoryImpl implements EndpointRepository {
 				.flatMapPublisher(resultSet -> Flowable.fromIterable(resultSet.getRows()));
 	}
 
+	@Override
+	public Flowable<JsonObject> findByEndPointIds(long[] ids) {
+		JsonArray idsPara = new JsonArray();
+		String queryExtension ="";
+		for (long id:  ids){
+			idsPara.add(id);
+			queryExtension += "?, ";
+		}
+		queryExtension = (queryExtension.length()>0) ? queryExtension.substring(0,queryExtension.length()-2) : queryExtension;
+
+		return sqlClient
+				.rxQueryWithParams("SELECT * FROM endpoints where id IN (" + queryExtension+ ")= ?", idsPara)
+				.flatMapPublisher(resultSet -> Flowable.fromIterable(resultSet.getRows()));
+	};
+
+
 	public Single<Optional<Long>> findEndpoint(String endpoint) {
 		return sqlClient.rxQueryWithParams("SELECT id FROM endpoints where endpoint = ?", new JsonArray().add(endpoint))
 				.map(rs -> {
