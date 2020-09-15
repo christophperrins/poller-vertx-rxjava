@@ -23,5 +23,5 @@ public interface InformationRepository {
 
     public Completable deleteByEndpointId(long id);
 
-    public Single<Long> create(Information information);
+    public Single<JsonObject> create(Information information);
 }

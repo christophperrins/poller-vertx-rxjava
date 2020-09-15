@@ -38,15 +38,15 @@ public class InformationRepositoryImpl implements InformationRepository {
     @Override
     public Flowable<JsonObject> findByEndPointIds(long[] ids) {
         JsonArray idsPara = new JsonArray();
-        String queryExtension ="";
+        StringBuilder queryExtension = new StringBuilder("");
         for (long id:  ids){
             idsPara.add(id);
-            queryExtension += "?, ";
+            queryExtension.append("?, ");
         }
-        queryExtension = (queryExtension.length()>0) ? queryExtension.substring(0,queryExtension.length()-2) : queryExtension;
+        queryExtension = (queryExtension.length() > 0) ? queryExtension.delete(queryExtension.length() - 2, queryExtension.length()) : queryExtension;
 
         return sqlClient
-                .rxQueryWithParams("SELECT * FROM information where endpoint_id IN (" + queryExtension+ ")= ?", idsPara)
+                .rxQueryWithParams("SELECT * FROM information where endpoint_id IN (" + queryExtension + ")", idsPara)
                 .flatMapPublisher(resultSet -> Flowable.fromIterable(resultSet.getRows()));
     };
 
@@ -66,13 +66,13 @@ public class InformationRepositoryImpl implements InformationRepository {
                 .ignoreElement();
     };
 
-    public Single<Long> create(Information information) {
+    public Single<JsonObject> create(Information information) {
         return sqlClient
                 .rxUpdateWithParams(
                         "INSERT INTO information (owner, street, postcode, city, endpoint_id) values (?, ?, ?, ?, ?)",
                         new JsonArray().add(information.getOwner()).add(information.getStreet())
                                 .add(information.getPostcode()).add(information.getCity()).add(information.getEndPointId()))
-                .map(updateResult -> updateResult.getKeys().getLong(0));
+                .map(updateResult -> updateResult.toJson());
     }
 
 }

@@ -23,15 +23,11 @@ public class InformationController extends AbstractVerticle {
 	}
 
 	@Override
-	public Completable rxStart() {
+	public void start() {
 		router.get("/api/information").handler(this::get);
 		router.post("/api/information").handler(BodyHandler.create()).handler(this::add);
 		router.put("/api/information").handler(BodyHandler.create()).handler(this::update);
 		router.delete("/api/information/:id").handler(this::delete);
-		return informationService.all().map(jsonObject -> {
-			Information information = mapper.readValue(jsonObject.toString(), Information.class);
-			return information;
-		}).ignoreElements();
 	}
 
 	public void get(RoutingContext routingContext) {
@@ -41,34 +37,38 @@ public class InformationController extends AbstractVerticle {
 				.end(mapper.writeValueAsString(informations)));
 	}
 
-	public void add(RoutingContext routingContext) {
+	public Information add(RoutingContext routingContext) {
 		try {
 			Information information = mapper.readValue(routingContext.getBodyAsString(), Information.class);
 			informationService.create(information).subscribe(id -> {
 				information.setId(id);
 				routingContext.response().end(String.valueOf(id));
 			});
+			return information;
 		} catch (JsonProcessingException e) {
 			routingContext.response().setStatusCode(400).end("Body was not in correct JSON format");
+			return null;
 		}
+
 	}
 
-	public void update(RoutingContext routingContext) {
+	public Information update(RoutingContext routingContext) {
 		Information information = null;
 		try {
 			information = mapper.readValue(routingContext.getBodyAsString(), Information.class);
 		} catch (JsonProcessingException e) {
 			routingContext.response().setStatusCode(400).end("Body was not in correct JSON format");
-			return;
+			return information;
 		}
 
 		if (!information.hasFieldsForUpdate()) {
 			System.out.println(information);
 			routingContext.response().setStatusCode(400).end("Body not in correct format");
-			return;
+			return information;
 		}
 
 		informationService.update(information).subscribe(() -> routingContext.response().end());
+		return information;
 	}
 
 	public void delete(RoutingContext routingContext) {
