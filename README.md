@@ -3,6 +3,7 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 ![commit][commits-shield]
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/bccc5ed2c8e1438998881d4a4ddeb8e7)](https://www.codacy.com/manual/christophperrins/poller-vertx-rxjava?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=christophperrins/poller-vertx-rxjava&amp;utm_campaign=Badge_Grade)
 
 <!-- Links -->
 [contributors-shield]: https://img.shields.io/github/contributors/christophperrins/poller-vertx-rxjava.svg
