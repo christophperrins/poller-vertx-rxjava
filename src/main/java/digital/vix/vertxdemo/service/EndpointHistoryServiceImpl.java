@@ -14,7 +14,6 @@ public class EndpointHistoryServiceImpl implements EndpointHistoryService {
 	private PollService pollService;
 
 	public EndpointHistoryServiceImpl(EndpointHistoryRepository endpointHistoryRepository, PollService pollService) {
-		super();
 		this.endpointHistoryRepository = endpointHistoryRepository;
 		this.pollService = pollService;
 	}

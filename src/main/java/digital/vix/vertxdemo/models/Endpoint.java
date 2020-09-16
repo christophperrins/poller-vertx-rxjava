@@ -9,7 +9,6 @@ public class Endpoint {
 	private Boolean active;
 
 	public Endpoint() {
-		super();
 	}
 
 	public Long getId() {

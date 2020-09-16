@@ -47,4 +47,5 @@ public class InformationServiceImpl implements InformationService{
     public Single<Long> create(Information information) {
         return informationRepository.create(information);
     }
+
 }

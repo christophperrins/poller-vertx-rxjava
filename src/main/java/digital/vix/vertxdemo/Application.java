@@ -1,5 +1,7 @@
 package digital.vix.vertxdemo;
 
+import digital.vix.vertxdemo.controller.InformationController;
+import digital.vix.vertxdemo.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,14 +9,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import digital.vix.vertxdemo.controller.EndpointController;
 import digital.vix.vertxdemo.controller.EndpointHistoryController;
-import digital.vix.vertxdemo.repository.EndpointHistoryRepository;
-import digital.vix.vertxdemo.repository.EndpointHistoryRepositoryImpl;
-import digital.vix.vertxdemo.repository.EndpointRepository;
-import digital.vix.vertxdemo.repository.EndpointRepositoryImpl;
+import digital.vix.vertxdemo.controller.EndpointMetaDataController;
 import digital.vix.vertxdemo.service.EndpointHistoryService;
 import digital.vix.vertxdemo.service.EndpointHistoryServiceImpl;
 import digital.vix.vertxdemo.service.EndpointService;
 import digital.vix.vertxdemo.service.EndpointServiceImpl;
+import digital.vix.vertxdemo.service.InformationService;
+import digital.vix.vertxdemo.service.InformationServiceImpl;
 import digital.vix.vertxdemo.service.PollService;
 import digital.vix.vertxdemo.service.PollServiceImpl;
 import io.vertx.core.json.JsonObject;
@@ -35,12 +36,12 @@ public class Application {
 	public void run() {
 		Vertx vertx = Vertx.vertx();
 
-		JsonObject jsonObject = new JsonObject()
+		JsonObject jdbcConfig = new JsonObject()
 				.put("url", "jdbc:mysql://localhost:3306/pollervertx?serverTimezone=BST")
 				.put("driver_class", "com.mysql.cj.jdbc.Driver").put("user", "root").put("password", "root")
 				.put("max_pool_size", 30);
 
-		sqlClient = JDBCClient.createShared(vertx, jsonObject);
+		sqlClient = JDBCClient.createShared(vertx, jdbcConfig);
 
 		logger.info("Connecting to database...");
 		sqlClient.getConnection(ar -> {
@@ -79,6 +80,9 @@ public class Application {
 				.subscribe(data -> vertx
 						.deployVerticle(new EndpointHistoryController(router, mapper, endpointHistoryService)));
 
+		InformationService informationService = new InformationServiceImpl(new InformationRepositoryImpl(sqlClient));
+		vertx.deployVerticle(new InformationController(router, mapper, informationService));
+		vertx.deployVerticle(new EndpointMetaDataController(router, mapper, endpointService, informationService));
 		int port = 8080;
 		vertx.createHttpServer().requestHandler(router).rxListen(port)
 				.subscribe(httpServer -> logger.info("HttpServer running on port: " + port));
