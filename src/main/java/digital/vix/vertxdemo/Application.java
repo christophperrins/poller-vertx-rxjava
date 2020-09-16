@@ -1,5 +1,7 @@
 package digital.vix.vertxdemo;
 
+import digital.vix.vertxdemo.controller.InformationController;
+import digital.vix.vertxdemo.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,10 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import digital.vix.vertxdemo.controller.EndpointController;
 import digital.vix.vertxdemo.controller.EndpointHistoryController;
 import digital.vix.vertxdemo.controller.EndpointMetaDataController;
-import digital.vix.vertxdemo.repository.EndpointHistoryRepository;
-import digital.vix.vertxdemo.repository.EndpointHistoryRepositoryImpl;
-import digital.vix.vertxdemo.repository.EndpointRepository;
-import digital.vix.vertxdemo.repository.EndpointRepositoryImpl;
 import digital.vix.vertxdemo.service.EndpointHistoryService;
 import digital.vix.vertxdemo.service.EndpointHistoryServiceImpl;
 import digital.vix.vertxdemo.service.EndpointService;
@@ -82,7 +80,8 @@ public class Application {
 				.subscribe(data -> vertx
 						.deployVerticle(new EndpointHistoryController(router, mapper, endpointHistoryService)));
 
-		InformationService informationService = new InformationServiceImpl();
+		InformationService informationService = new InformationServiceImpl(new InformationRepositoryImpl(sqlClient));
+		vertx.deployVerticle(new InformationController(router, mapper, informationService));
 		vertx.deployVerticle(new EndpointMetaDataController(router, mapper, endpointService, informationService));
 		int port = 8080;
 		vertx.createHttpServer().requestHandler(router).rxListen(port)

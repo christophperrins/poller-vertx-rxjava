@@ -86,7 +86,8 @@ public class EndpointMetaDataController extends AbstractVerticle {
     }
 
     private Single<EndpointMetaDataDto> attachInformationToEndpoint(Endpoint endpoint) {
-        return informationService.findEndpointById(endpoint.getId())
+        return informationService.findByEndPointId(endpoint.getId()).map(rs -> rs.getRows().get(0))
+                .map(json -> mapper.readValue(json.toString(), Information.class))
                 .map(information -> new EndpointMetaDataDto(endpoint, information));
     }
 
@@ -100,10 +101,10 @@ public class EndpointMetaDataController extends AbstractVerticle {
             endpointService.readAllEndpoints().map(jsonObject -> {
                 return mapper.readValue(jsonObject.toString(), Endpoint.class);
             }).filter(endpoint -> ArrayUtils.arrayContains(ids, endpoint.getId())).toList().flatMap(endpointList -> {
-                return informationService.findEndpointsByIds(ids).toList().map(informationList -> {
+                return informationService.findByEndPointIds(ids).map(json -> mapper.readValue(json.toString(), Information.class)).toList().map(informationList -> {
                     return endpointList.stream().map(endpoint -> {
                         Information foundInfo = informationList.stream()
-                                .filter(information -> information.getEndpointId() == endpoint.getId()).findFirst()
+                                .filter(information -> information.getEndPointId() == endpoint.getId()).findFirst()
                                 .orElseGet(() -> new Information());
                         return new EndpointMetaDataDto(endpoint, foundInfo);
                     }).collect(Collectors.toList());

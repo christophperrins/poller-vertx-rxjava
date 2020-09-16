@@ -1,9 +1,12 @@
 package digital.vix.vertxdemo.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Objects;
 
 public class Information {
     private Long id;
+    @JsonProperty("endpoint_id")
     private Long endPointId;
     private String owner;
     private String street;
