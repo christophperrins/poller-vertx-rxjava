@@ -8,10 +8,6 @@ public class Endpoint {
 	private Integer frequency;
 	private Boolean active;
 
-	public Endpoint() {
-		super();
-	}
-
 	public Long getId() {
 		return id;
 	}

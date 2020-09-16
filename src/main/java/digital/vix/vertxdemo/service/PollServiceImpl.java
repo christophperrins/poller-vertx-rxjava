@@ -15,13 +15,12 @@ public class PollServiceImpl implements PollService {
 
 	private Vertx vertx;
 	private EndpointHistoryRepository endpointHistoryRepository;
-
+	private Map<Long, Endpoint> endpoints = new HashMap<Long, Endpoint>();
+	
 	public PollServiceImpl(Vertx vertx, EndpointHistoryRepository endpointHistoryRepository) {
 		this.vertx = vertx;
 		this.endpointHistoryRepository = endpointHistoryRepository;
 	}
-
-	Map<Long, Endpoint> endpoints = new HashMap<Long, Endpoint>();
 
 	@Override
 	public void saveToCache(Endpoint endpoint) {
