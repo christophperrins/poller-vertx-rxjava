@@ -26,7 +26,7 @@ import io.vertx.reactivex.ext.web.Router;
 
 public class Application {
 
-	Logger logger = LoggerFactory.getLogger(Application.class);
+	public Logger logger = LoggerFactory.getLogger(Application.class);
 	private SQLClient sqlClient;
 
 	public static void main(String[] args) {
