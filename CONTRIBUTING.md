@@ -16,8 +16,8 @@ Chosen issues will then be added to the next project release.
 
 ### Master branch
 
-  -  Only for milestone releases or weekly releases
-  -  Only merges from dev branch no direct commits
+-    Only for milestone releases or weekly releases
+-    Only merges from dev branch no direct commits
 
 ### Dev branch
 
@@ -29,9 +29,9 @@ Contain commits to address all the tasks or issues for the branch
 
 ## General thoughts to fixing effects and creating issues 
 
-  -  The owner of a branch should fix the bug himself if possibly
-  -  Bugs should be fixed in the same branch
-  -  Code linting should happen before the PR and Merge. Codestyle Fixes should be part of the branch you merge in. 
+-    The owner of a branch should fix the bug himself if possibly
+-    Bugs should be fixed in the same branch
+-    Code linting should happen before the PR and Merge. Codestyle Fixes should be part of the branch you merge in. 
 
 ## Commits , Pushes and Merges 
 
@@ -79,6 +79,6 @@ In the description describe what the PR will solve or address.
 
 `[issueNumber]-[label]:[area]-Name of branch (PR number)`
 
-  -  Title should not contain "merge ..." but the above syntax.
-  -  Shall have the name of the branch.
+-   Title should not contain "merge ..." but the above syntax.
+-   Shall have the name of the branch.
  
