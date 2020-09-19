@@ -1,0 +1,27 @@
+{
+  "name": "demo-vertx",
+  "version": "0.0.0",
+  "description": "A project used to display knowledge of vertx and rxjava",
+  "main": "",
+  "scripts": {
+    "test": "mocha -r src/test/resources/config --recursive --config src/test/resources/mocharc.yaml src/test/javascript"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/christophperrins/poller-vertx-rxjava.git"
+  },
+  "author": "Chris Perrrins & Matthias Elsner",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/christophperrins/poller-vertx-rxjava/issues"
+  },
+  "homepage": "https://github.com/christophperrins/poller-vertx-rxjava#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "fs": "0.0.1-security",
+    "mocha": "^8.1.3",
+    "mysql": "^2.18.1",
+    "supertest": "^4.0.2"
+  }
+}
