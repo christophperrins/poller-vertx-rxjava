@@ -9,6 +9,8 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.sql.ResultSet;
 import io.vertx.reactivex.ext.sql.SQLClient;
 
+import java.util.Arrays;
+
 public class InformationRepositoryImpl implements InformationRepository {
 
     private SQLClient sqlClient;
@@ -37,13 +39,12 @@ public class InformationRepositoryImpl implements InformationRepository {
 
     @Override
     public Flowable<JsonObject> findByEndPointIds(long[] ids) {
-        JsonArray idsPara = new JsonArray();
-        StringBuilder queryExtension = new StringBuilder("");
-        for (long id:  ids){
-            idsPara.add(id);
-            queryExtension.append("?, ");
-        }
-        queryExtension = (queryExtension.length() > 0) ? queryExtension.delete(queryExtension.length() - 2, queryExtension.length()) : queryExtension;
+        JsonArray idsPara = new JsonArray(Arrays.asList(ids));
+
+        String queryExtension = Arrays.stream(ids)
+            .mapToObj(number -> "?")
+            .reduce((prev, next) -> prev + "," + next)
+            .get();
 
         return sqlClient
                 .rxQueryWithParams("SELECT * FROM information where endpoint_id IN (" + queryExtension + ")", idsPara)
