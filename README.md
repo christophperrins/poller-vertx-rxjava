@@ -17,4 +17,18 @@
 
 [commits-shield]: https://img.shields.io/github/commits-since/christophperrins/poller-vertx-rxjava/v0.0.0/developer?label=commits%20since%20v0.0.0
 
-This project uses vertx and rxjava to create a backend system which can poll endpoints. Information about the speed of reply is then saved to a mysql database. Metadata can also be attached to an endpoint to tie information together.
+This project uses vertx and rxjava to create a backend system which can poll endpoints. Information about the speed of reply is then saved to a mysql database. Metadata can also be attached to an endpoint to tie information together. 
+
+## Integration Testing
+
+Integration tests have been written in Javascript using SuperTest and the Mocha testing framework. 
+
+1) First install the packages `npm i` 
+
+2) Next make sure the schema is correct and empty of information. 
+
+3) Start the application. 
+
+4) To run the tests run `npm run test` . 
+
+5) If you want test output to a file run `npm run test > results.txt` 
