@@ -9,6 +9,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<vertx.version>3.9.2</vertx.version>
+        <modelmapper.version>2.3.8</modelmapper.version>
 	</properties>
 
 	<!-- tag::dependencies[] -->
@@ -58,5 +59,13 @@
 			<artifactId>jsoup</artifactId>
 			<version>1.11.3</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>${modelmapper.version}</version>
+		</dependency>
+
 	</dependencies>
 </project>

@@ -2,6 +2,7 @@ package digital.vix.vertxdemo;
 
 import digital.vix.vertxdemo.controller.InformationController;
 import digital.vix.vertxdemo.repository.*;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,7 +79,7 @@ public class Application {
 
 		vertx.rxDeployVerticle(new EndpointController(router, mapper, endpointService, endpointHistoryService))
 				.subscribe(data -> vertx
-						.deployVerticle(new EndpointHistoryController(router, mapper, endpointHistoryService)));
+						.deployVerticle(new EndpointHistoryController(router, mapper, endpointHistoryService, new ModelMapper())));
 
 		InformationService informationService = new InformationServiceImpl(new InformationRepositoryImpl(sqlClient));
 		vertx.deployVerticle(new InformationController(router, mapper, informationService));
